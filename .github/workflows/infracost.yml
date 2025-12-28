@@ -29,6 +29,10 @@ jobs:
       # See https://www.infracost.io/docs/features/terraform_modules/#registry-modules for details.
       #   INFRACOST_TERRAFORM_CLOUD_TOKEN: ${{ secrets.TFC_TOKEN }}
       #   INFRACOST_TERRAFORM_CLOUD_HOST: app.terraform.io
+    env:
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      # Provide Terraform variables as environment variables
+      INFRACOST_TERRAFORM_VAR_GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
     steps:
       # If you use private modules, add an environment variable or secret
       # called GIT_SSH_KEY with your private key, so Infracost CLI can access
@@ -94,6 +98,8 @@ jobs:
     name: Infracost Default Branch Update
     if: github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'master')
     runs-on: ubuntu-latest
+    env:
+      INFRACOST_TERRAFORM_VAR_GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
     steps:
       - name: Setup Infracost
         uses: infracost/actions/setup@v3
